@@ -1,33 +1,46 @@
+/*
+** Author: Jesse Greenert
+*/
+
 #include <stdio.h>
+#include <stdlib.h>
+#include <String.h>
 
 void readFreq(float given[])
 {
 	
 	FILE *fp = fopen("LetFreq.txt", "r");
-	char letter = ' ';
-	while((letter = fgetc(fp)) != EOF)
+	char buff[100] = " ";
+	char* garbage = " ";
+	char* freq = " ";
+	int count = 0;
+	while((fgets(buff, 100, fp)) != NULL)
 	{
-		given[letter]++;
-	}			
+		garbage = strtok(buff, " ");
+		freq = strtok(NULL, "\n");
+		//printf("%s: %s\n", index, freq);
+		given[count] = atof(freq);
+		count++;
+	}
+			
 	fclose(fp);
 }
 
 void calcFreq(float found[])
 {
-
-
+		
 }
 
 char rotate(char ch, int num)
 {
 
-
+	return 0;
 }
 
 int findKey(float given[], float found[])
 {
 
-
+	return 0;
 }
 
 void decrypt(int key)
@@ -36,20 +49,30 @@ void decrypt(int key)
 
 }
 
+/*
+** Helper function for printing what's inside of 
+** the array of frequencies.
+*/
 void printTest(float toPrint[])
 {
-	for(int i = 0; i < sizeof(toPrint); i++)
+	
+	for(int i = 0; i < 26; i++)
 	{
-		char character = (char) (i);
-		printf("%s %d: %f\n", "Character", character, toPrint[i]); 
+		 printf("%f\n", toPrint[i]);
 	}
 }
 
+/*
+** Main Method
+*/
 int main()
 {
-	float given[25];
-	readFreq(given);	
-	printTest(given);
+	float given[26];
+	float found[26];
+	readFreq(given); //Reading in known frequencies	
+	printTest(given); //Printing out Given
+	calcFreq(found); //Finding character frequencies of file
+	printTest(found); //Pritning out Found
 }
 
 
