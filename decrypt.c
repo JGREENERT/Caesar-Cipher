@@ -18,12 +18,11 @@ void readFreq(float given[])
 	
 	FILE *fp = fopen("LetFreq.txt", "r");
 	char buff[100] = " ";
-	char* garbage = " ";
 	char* freq = " ";
 	int count = 0;
 	while((fgets(buff, 100, fp)) != NULL)
 	{
-		garbage = strtok(buff, " ");
+		strtok(buff, " ");
 		freq = strtok(NULL, "\n");
 		given[count] = atof(freq);
 		count++;
@@ -51,8 +50,8 @@ void calcFreq(float found[])
 			totalChars++;
 		}
 	}		
-
-	for(int i = 0; i < 26; i++)
+	int i;
+	for(i = 0; i < 26; i++)
 	{
 		found[i] = (found[i]/totalChars);
 	}
@@ -86,9 +85,11 @@ int findKey(float given[], float found[])
 	int key = 0;
 	float difference = 0;
 	float least = INT_MAX;
-	for(int i = 0; i < 26; i++)
+	int i;
+	for(i = 0; i < 26; i++)
 	{
-		for(int j = 0; j< 26; j++)
+		int j;
+		for(j = 0; j< 26; j++)
 		{
 			int index = (i+j) % 26;
 			float temp = given[j] - found[index];
@@ -138,7 +139,8 @@ void decrypt(int key)
 */
 void initArray (float found[])
 {
-	for(int i = 0; i < 26; i++)
+	int i;
+	for(i = 0; i < 26; i++)
 	{
 		found[i] = 0;
 	}
@@ -150,7 +152,8 @@ void initArray (float found[])
 */
 void printTest(float toPrint[])
 {	
-	for(int i = 0; i < 26; i++)
+	int i;
+	for(i = 0; i < 26; i++)
 	{
 		 printf("%f\n", toPrint[i]);
 	}
