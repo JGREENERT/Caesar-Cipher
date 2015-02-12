@@ -7,6 +7,8 @@
 #include <string.h>
 #include <ctype.h>
 
+void printTest(float[]);
+
 /*
 ** Reads in frequencies from a given file
 */
@@ -22,7 +24,6 @@ void readFreq(float given[])
 	{
 		garbage = strtok(buff, " ");
 		freq = strtok(NULL, "\n");
-		//printf("%s: %s\n", index, freq);
 		given[count] = atof(freq);
 		count++;
 	}
@@ -30,7 +31,11 @@ void readFreq(float given[])
 	fclose(fp);
 }
 
-
+/*
+** Calculates frequencies of plain text given
+** from a file. Converts all letters to uppercase
+** before determining what letter it is
+*/
 void calcFreq(float found[])
 {
 	FILE *fp = fopen("SomeText.txt", "r");
@@ -40,14 +45,15 @@ void calcFreq(float found[])
 	{
 		if(isalpha(buff))
 		{
-			found[(toupper(buff) - 65)]++;
+			int temp = toupper(buff) - 65;
+			found[temp]++;
 			totalChars++;
 		}
 	}		
 
 	for(int i = 0; i < 26; i++)
 	{
-		found[i] = found[i]/totalChars;
+		found[i] = (found[i]/totalChars);
 	}
 }
 
@@ -70,7 +76,7 @@ char rotate(char ch, int num)
 
 int findKey(float given[], float found[])
 {
-
+	
 	return 0;
 }
 
@@ -78,6 +84,18 @@ void decrypt(int key)
 {
 
 
+}
+/*
+** Was getting garbage values when trying to
+** update arrays in the middle, so I made this 
+** function to initially set all float values to 0.
+*/
+void initArray (float found[])
+{
+	for(int i = 0; i < 26; i++)
+	{
+		found[i] = 0;
+	}
 }
 
 /*
@@ -90,6 +108,7 @@ void printTest(float toPrint[])
 	{
 		 printf("%f\n", toPrint[i]);
 	}
+	printf("%c", '\n');
 }
 
 /*
@@ -99,10 +118,12 @@ int main()
 {
 	float given[26];
 	float found[26];
-	//readFreq(given); //Reading in known frequencies	
+	initArray(found);
+	readFreq(given); //Reading in known frequencies	
 	//printTest(given); //Printing out Given
-	//calcFreq(found); //Finding character frequencies of file
-	//printTest(found); //Pritning out Found 
+	calcFreq(found); //Finding character frequencies of file
+	//printTest(found); //Printing out Found
+	decrypt(findKey(given, found));
 }
 
 
