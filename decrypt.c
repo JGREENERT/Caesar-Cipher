@@ -96,7 +96,7 @@ int findKey(float given[], float found[])
 				temp = temp * -1;
 			difference += temp;
 		}
-		printf("The difference is: %f\n", difference);
+		//printf("The difference is: %f\n", difference);
 		if(difference < least)
 		{	
 			least = difference;
@@ -104,7 +104,7 @@ int findKey(float given[], float found[])
 		}
 		difference = 0.0;
 	}
-	printf("%d", key);
+	//printf("%d", key);
 	return -key;
 }
 
