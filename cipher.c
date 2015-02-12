@@ -1,78 +1,65 @@
-/*
-** Author: Jesse Greenert
-*/
+// Project: 	Caesar Ciphers
+// Author:	Yonglei Tao
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <String.h>
 
-void readFreq(float given[])
+/**
+	Encrypts a character using the Caesar cipher.
+	@param ch the character to encrypt
+	@param k the encryption key
+	@return the encrypted character
+*/
+char encrypt(char ch, int k)
 {
+	if ( k < 0 )
+		k = k + 26;
+
+	if ( isupper(ch) )
+		return (ch - 'A' + k) % 26 + 'A';
 	
-	FILE *fp = fopen("LetFreq.txt", "r");
-	char buff[100] = " ";
-	char* garbage = " ";
-	char* freq = " ";
-	int count = 0;
-	while((fgets(buff, 100, fp)) != NULL)
+	if ( islower(ch) )
+		return (ch - 'a' + k) % 26 + 'a';
+	
+	return ch;
+}
+
+int main(int argc, char* argv[])
+{  
+	int choice, key;
+	char ch;
+	FILE *fin, *fout;
+
+	if (argc != 5)
 	{
-		garbage = strtok(buff, " ");
-		freq = strtok(NULL, "\n");
-		//printf("%s: %s\n", index, freq);
-		given[count] = atof(freq);
-		count++;
+		printf ("Usage: cipher option key infile, outfile\n");
+		printf ("Option 1 for encryption and 2 for decryption");
+		exit(1);
 	}
-			
-	fclose(fp);
-}
+	
+	choice = atoi(argv[1]);
+	key = atoi(argv[2]);
 
-void calcFreq(float found[])
-{
-		
-}
+	if (choice == 2)
+		key = -key;
+	
+    	fin = fopen(argv[3], "r");
+	fout = fopen(argv[4], "w");
+    
+    	if (fin ==  NULL || fout == NULL) 
+	{
+		printf("File could not be opened\n");
+		exit(1);
+	}
 
-char rotate(char ch, int num)
-{
+	while ( fscanf(fin, "%c", &ch) != EOF )
+	{
+		fprintf(fout, "%c", encrypt(ch, key));
+	}
+
+	fclose(fin);
+	fclose(fout);
 
 	return 0;
 }
-
-int findKey(float given[], float found[])
-{
-
-	return 0;
-}
-
-void decrypt(int key)
-{
-
-
-}
-
-/*
-** Helper function for printing what's inside of 
-** the array of frequencies.
-*/
-void printTest(float toPrint[])
-{
-	
-	for(int i = 0; i < 26; i++)
-	{
-		 printf("%f\n", toPrint[i]);
-	}
-}
-
-/*
-** Main Method
-*/
-int main()
-{
-	float given[26];
-	float found[26];
-	readFreq(given); //Reading in known frequencies	
-	printTest(given); //Printing out Given
-	calcFreq(found); //Finding character frequencies of file
-	printTest(found); //Pritning out Found
-}
-
-

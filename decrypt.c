@@ -74,17 +74,33 @@ char rotate(char ch, int num)
 	}
 }
 
+/*
+** Finding the key for decryption
+*/
 int findKey(float given[], float found[])
 {
-	
-	return 0;
+	int key = 0;
+	float difference = 1;
+	for(int i = 0; i < 26; i++)
+	{
+		if(abs(given[i] - found[i]) < difference)
+		{
+			difference = abs(given[i] - found[i]);
+			key = i;
+		}
+	}
+	return key;
 }
 
+/*
+** Decrypt the encoded data
+*/
 void decrypt(int key)
 {
 
 
 }
+
 /*
 ** Was getting garbage values when trying to
 ** update arrays in the middle, so I made this 
