@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <limits.h>
 
 void printTest(float[]);
 
@@ -38,7 +39,7 @@ void readFreq(float given[])
 */
 void calcFreq(float found[])
 {
-	FILE *fp = fopen("SomeText.txt", "r");
+	FILE *fp = fopen("encrypted.dat", "r");
 	char buff = ' ';
 	int totalChars = 0;
 	while((buff = fgetc(fp)) != EOF)
@@ -55,6 +56,7 @@ void calcFreq(float found[])
 	{
 		found[i] = (found[i]/totalChars);
 	}
+	fclose(fp);
 }
 
 /*
@@ -63,15 +65,17 @@ void calcFreq(float found[])
 */
 char rotate(char ch, int num)
 {
-	char rotChar = toupper(ch);
-	if((rotChar + num) > 90)
+	if(num < 0)
+		num = num + 26;
+	
+	if(isalpha(ch))
 	{
-		return ((rotChar + num - 90) + 64);
+		if(islower(ch))
+			return (ch - 'a' + num) % 26 + 'a';
+		if(isupper(ch))
+			return (ch - 'A' + num) % 26 + 'A';
 	}
-	else
-	{
-		return rotChar + num;
-	}
+	return ch;
 }
 
 /*
@@ -80,16 +84,28 @@ char rotate(char ch, int num)
 int findKey(float given[], float found[])
 {
 	int key = 0;
-	float difference = 1;
+	float difference = 0;
+	float least = INT_MAX;
 	for(int i = 0; i < 26; i++)
 	{
-		if(abs(given[i] - found[i]) < difference)
+		for(int j = 0; j< 26; j++)
 		{
-			difference = abs(given[i] - found[i]);
+			int index = (i+j) % 26;
+			float temp = given[j] - found[index];
+			if(temp < 0)
+				temp = temp * -1;
+			difference += temp;
+		}
+		printf("The difference is: %f\n", difference);
+		if(difference < least)
+		{	
+			least = difference;
 			key = i;
 		}
+		difference = 0.0;
 	}
-	return key;
+	printf("%d", key);
+	return -key;
 }
 
 /*
@@ -97,8 +113,22 @@ int findKey(float given[], float found[])
 */
 void decrypt(int key)
 {
-
-
+	FILE *fp = fopen("encrypted.dat", "r");
+	FILE *out = fopen("final.dat", "w");
+	char buff = ' ';
+	while((buff = fgetc(fp)) != EOF)
+	{
+		if(isalpha(buff))
+		{
+			fprintf(out, "%c", rotate(buff, key));
+		}
+		else
+		{
+			fprintf(out, "%c", buff);
+		}
+	}
+	fclose(fp);
+	fclose(out);
 }
 
 /*
